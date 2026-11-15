@@ -24,6 +24,17 @@ export class ErrorDeConflicto extends Error {
   }
 }
 
+export class ErrorNoEncontrado extends Error {
+  public readonly codigoEstado = 404;
+  public readonly detalles: string[];
+
+  constructor(mensaje: string, detalles: string[] = []) {
+    super(mensaje);
+    this.name = 'ErrorNoEncontrado';
+    this.detalles = detalles;
+  }
+}
+
 export type RouteHandler<TContext = unknown> = (
   request: Request,
   context: TContext
@@ -62,6 +73,16 @@ export function manejar<TContext = unknown>(
       }
 
       if (error instanceof ErrorDeConflicto) {
+        return NextResponse.json(
+          {
+            error: error.message,
+            detalles: error.detalles,
+          },
+          { status: error.codigoEstado }
+        );
+      }
+
+      if (error instanceof ErrorNoEncontrado) {
         return NextResponse.json(
           {
             error: error.message,
