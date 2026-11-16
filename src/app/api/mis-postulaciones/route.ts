@@ -1,9 +1,11 @@
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
 import { requerirRol, requerirUsuario } from '@/lib/auth';
 import { manejar } from '@/lib/errores';
 import { adminDb } from '@/lib/firebase/admin';
 import type { EstadoPostulacion } from '@/schemas/postulacion.schema';
-export const dynamic = 'force-dynamic';
+
 
 export interface MiPostulacionItem {
   id: string;

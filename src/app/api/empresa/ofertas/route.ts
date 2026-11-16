@@ -1,9 +1,9 @@
+export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { requerirRol, requerirUsuario } from '@/lib/auth';
 import { manejar } from '@/lib/errores';
 import { adminDb } from '@/lib/firebase/admin';
 import type { OfertaRespuesta } from '@/schemas/oferta.schema';
-export const dynamic = 'force-dynamic';
 
 export const GET = manejar(async (request: Request): Promise<Response> => {
   const usuario = await requerirUsuario(request);
