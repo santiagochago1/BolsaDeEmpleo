@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Link from 'next/link';
 import { connection } from 'next/server';
 import { Suspense } from 'react';
