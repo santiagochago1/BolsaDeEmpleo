@@ -1,4 +1,3 @@
-export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { requerirUsuario } from '@/lib/auth';
 import { manejar } from '@/lib/errores';
