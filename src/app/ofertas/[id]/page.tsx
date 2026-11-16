@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { connection } from 'next/server';
 import { Suspense } from 'react';
 import FormularioPostulacion from '@/components/FormularioPostulacion';
 import { ErrorNoEncontrado } from '@/lib/errores';
@@ -43,6 +44,7 @@ async function ContenidoDetalleOferta({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await connection();
   const { id } = await params;
 
   let oferta;

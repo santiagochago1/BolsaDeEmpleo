@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { connection, NextResponse } from 'next/server';
 import { requerirRol, requerirUsuario, verificarOrigen } from '@/lib/auth';
 import { manejar } from '@/lib/errores';
 import {
@@ -9,6 +9,7 @@ import {
 import { crearOferta, listarOfertas } from '@/services/oferta.service';
 
 export const GET = manejar(async (request: Request): Promise<Response> => {
+  await connection();
   const { searchParams } = new URL(request.url);
 
   const modalidadParam = searchParams.get('modalidad');

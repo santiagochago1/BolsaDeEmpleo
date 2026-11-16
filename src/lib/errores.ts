@@ -47,6 +47,15 @@ export function manejar<TContext = unknown>(
     try {
       return await handler(request, context);
     } catch (error: unknown) {
+      if (
+        error &&
+        typeof error === 'object' &&
+        'digest' in error &&
+        (error as { digest?: string }).digest === 'NEXT_PRERENDER_INTERRUPTED'
+      ) {
+        throw error;
+      }
+
       if (error instanceof ZodError) {
         const detalles = error.issues.map((issue) => {
           const ruta = issue.path.length > 0 ? `${issue.path.join('.')}: ` : '';

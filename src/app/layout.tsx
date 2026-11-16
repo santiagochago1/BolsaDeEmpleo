@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
+import { Suspense } from 'react';
+import BotonCerrarSesion from '@/components/BotonCerrarSesion';
 import './globals.css';
 
 const inter = Inter({
@@ -14,7 +17,79 @@ export const metadata: Metadata = {
     'Plataforma de ofertas de empleo y prácticas profesionales con postulación en PDF.',
 };
 
-export default function RootLayout({
+function FallbackNavegacion() {
+  return (
+    <ul className="flex flex-wrap items-center gap-3 sm:gap-5">
+      <li>
+        <Link
+          href="/"
+          className="inline-flex min-h-[44px] items-center px-2 text-sm font-medium text-slate-700 hover:text-blue-700 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:text-slate-200 dark:hover:text-blue-400"
+        >
+          Inicio
+        </Link>
+      </li>
+      <li>
+        <div
+          aria-hidden="true"
+          className="h-9 w-28 animate-pulse rounded-md bg-slate-200 dark:bg-slate-800"
+        />
+      </li>
+    </ul>
+  );
+}
+
+async function NavegacionSesion() {
+  const cookieStore = await cookies();
+  const sesionActiva = cookieStore.has('sesion');
+
+  return (
+    <ul className="flex flex-wrap items-center gap-3 sm:gap-5">
+      <li>
+        <Link
+          href="/"
+          className="inline-flex min-h-[44px] items-center px-2 text-sm font-medium text-slate-700 hover:text-blue-700 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:text-slate-200 dark:hover:text-blue-400"
+        >
+          Inicio
+        </Link>
+      </li>
+
+      {sesionActiva ? (
+        <>
+          <li>
+            <Link
+              href="/mis-postulaciones"
+              className="inline-flex min-h-[44px] items-center px-2 text-sm font-medium text-slate-700 hover:text-blue-700 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:text-slate-200 dark:hover:text-blue-400"
+            >
+              Mis postulaciones
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/empresa"
+              className="inline-flex min-h-[44px] items-center px-2 text-sm font-medium text-slate-700 hover:text-blue-700 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:text-slate-200 dark:hover:text-blue-400"
+            >
+              Empresa
+            </Link>
+          </li>
+          <li>
+            <BotonCerrarSesion />
+          </li>
+        </>
+      ) : (
+        <li>
+          <Link
+            href="/login"
+            className="inline-flex min-h-[44px] items-center rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Iniciar sesión
+          </Link>
+        </li>
+      )}
+    </ul>
+  );
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -41,40 +116,9 @@ export default function RootLayout({
             </Link>
 
             <nav aria-label="Navegación principal">
-              <ul className="flex flex-wrap items-center gap-3 sm:gap-5">
-                <li>
-                  <Link
-                    href="/"
-                    className="inline-flex min-h-[44px] items-center px-2 text-sm font-medium text-slate-700 hover:text-blue-700 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:text-slate-200 dark:hover:text-blue-400"
-                  >
-                    Inicio
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/mis-postulaciones"
-                    className="inline-flex min-h-[44px] items-center px-2 text-sm font-medium text-slate-700 hover:text-blue-700 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:text-slate-200 dark:hover:text-blue-400"
-                  >
-                    Mis postulaciones
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/empresa"
-                    className="inline-flex min-h-[44px] items-center px-2 text-sm font-medium text-slate-700 hover:text-blue-700 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:text-slate-200 dark:hover:text-blue-400"
-                  >
-                    Empresa
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/login"
-                    className="inline-flex min-h-[44px] items-center rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                  >
-                    Iniciar sesión
-                  </Link>
-                </li>
-              </ul>
+              <Suspense fallback={<FallbackNavegacion />}>
+                <NavegacionSesion />
+              </Suspense>
             </nav>
           </div>
         </header>

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { connection } from 'next/server';
 import { Suspense } from 'react';
 import { listarOfertas } from '@/services/oferta.service';
 
@@ -38,6 +39,7 @@ function SkeletonOfertas() {
 }
 
 async function ListaOfertasDisponibles() {
+  await connection();
   const { items: ofertas } = await listarOfertas({}, 20);
 
   if (ofertas.length === 0) {

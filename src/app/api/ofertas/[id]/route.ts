@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { connection, NextResponse } from 'next/server';
 import { requerirUsuario, verificarOrigen } from '@/lib/auth';
 import { manejar } from '@/lib/errores';
 import { cerrarOferta, obtenerOferta } from '@/services/oferta.service';
@@ -9,6 +9,7 @@ export interface RouteContextOfertaId {
 
 export const GET = manejar<RouteContextOfertaId>(
   async (_request: Request, context: RouteContextOfertaId): Promise<Response> => {
+    await connection();
     const { id } = await context.params;
     const oferta = await obtenerOferta(id);
 

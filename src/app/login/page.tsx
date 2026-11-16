@@ -1,6 +1,7 @@
 'use client';
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { type FormEvent, useState } from 'react';
 import { auth } from '@/lib/firebase/client';
@@ -143,6 +144,16 @@ export default function LoginPage() {
           {cargando ? 'Iniciando sesión...' : 'Entrar'}
         </button>
       </form>
+
+      <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
+        ¿No tienes cuenta?{' '}
+        <Link
+          href="/registro"
+          className="font-semibold text-blue-700 hover:underline focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:text-blue-400"
+        >
+          Regístrate aquí
+        </Link>
+      </p>
     </section>
   );
 }
