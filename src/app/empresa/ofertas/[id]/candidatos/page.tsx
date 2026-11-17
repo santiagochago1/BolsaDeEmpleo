@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import type {
   EstadoPostulacion,
   PostulacionRespuesta,
@@ -17,7 +17,29 @@ const ESTADOS_POSTULACION: EstadoPostulacion[] = [
   'contratado',
 ];
 
-export default function CandidatosPorOfertaPage() {
+function SkeletonCandidatos() {
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+      className="space-y-6"
+    >
+      <span className="sr-only">Cargando candidatos de la oferta...</span>
+      <div className="h-9 w-72 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
+      <div className="space-y-4">
+        {Array.from({ length: 3 }).map((_, idx) => (
+          <div
+            key={idx}
+            className="h-28 w-full animate-pulse rounded-lg bg-slate-200 dark:bg-slate-800"
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CandidatosContent() {
   const params = useParams<{ id: string }>();
   const ofertaId = params?.id ?? '';
   const router = useRouter();
@@ -152,25 +174,7 @@ export default function CandidatosPorOfertaPage() {
   }
 
   if (cargando) {
-    return (
-      <div
-        role="status"
-        aria-live="polite"
-        aria-busy="true"
-        className="space-y-6"
-      >
-        <span className="sr-only">Cargando candidatos de la oferta...</span>
-        <div className="h-9 w-72 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
-        <div className="space-y-4">
-          {Array.from({ length: 3 }).map((_, idx) => (
-            <div
-              key={idx}
-              className="h-28 w-full animate-pulse rounded-lg bg-slate-200 dark:bg-slate-800"
-            />
-          ))}
-        </div>
-      </div>
-    );
+    return <SkeletonCandidatos />;
   }
 
   return (
@@ -296,5 +300,13 @@ export default function CandidatosPorOfertaPage() {
         )}
       </section>
     </div>
+  );
+}
+
+export default function CandidatosPorOfertaPage() {
+  return (
+    <Suspense fallback={<SkeletonCandidatos />}>
+      <CandidatosContent />
+    </Suspense>
   );
 }
