@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { connection } from 'next/server';
 import { listarOfertas } from '@/services/oferta.service';
 
+export const instant = false;
+
 const ETIQUETA_MODALIDAD: Record<string, string> = {
   presencial: 'Presencial',
   remoto: 'Remoto',
