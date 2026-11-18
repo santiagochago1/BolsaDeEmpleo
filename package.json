@@ -34,5 +34,10 @@
     "tailwindcss": "4.3.3",
     "typescript": "^5",
     "vitest": "^5.1.0"
+  },
+  "overrides": {
+  "firebase-admin": {
+    "jwks-rsa": "3.2.2"
   }
+}
 }
